@@ -1,0 +1,95 @@
+---
+bibliography: paper.bib
+output: rticles::acm_article
+
+title: "EccAuth: An Access Control Vocabulary for RDF"
+author:
+  - name: Marvin Frommhold
+    email: frommhold@informatik.uni-leipzig.de
+    affiliation: Agile Knowledge Engineering and Semantic Web (AKSW), Institute of Computer Science, Leipzig University, Augustusplatz 10, 04109 Leipzig, Germany
+abstract: |
+  This is the abstract.
+
+  It consists of two paragraphs.
+---
+
+# Introduction
+
+We present EccAuth, the eccenca authorization vocabulary.
+
+_Motivation._ Our motivation here.
+
+_Structure._
+Section 2 introduces the vocabulary
+
+# Vocabulary
+
+A context based access control language [@Kirrane2015-bu].
+
+Definition 1 (Access Control Rule).
+: An access control rule $ACR$ is defined as a tuple of the form $ACR = (T, AC, AG, AD)$.
+
+_TODO_ rename `eccauth:Condition` to `eccauth:Rule`
+
+Definition 2 (Target).
+: A target $T$ is a (set of) resource(s) to be protected.
+
+SHACL extension.
+High expressive, but just a small extension (range of `eccauth:targets`). Linked Data principle of reuse, well known meaning (W3C Candidate Recommendation).
+We use SHACL for targeting resources: resources, statements (through `rdf:Statement`), graphs (through `sd:Graph`).
+
+Definition 3 (Access Context).
+: An access context $AC$ is a set of attributes of the requesting entity.
+
+Context matching as conjunction of all `eccauth:requires` properties. Attributes linked by IRI (_TODO_ set range to `owl:NamedIndividual`).
+
+Definition 4 (Access Grant).
+: An access grant $AG$ is a set of permissions granted to the requesting entity.
+
+Granting permissions by IRI reference using property `eccauth:grants`. 
+
+_TODO_ set range of `eccauth:issues` to `owl:NamedIndividual`
+
+Definition 5 (Access Denial).
+: An access denial $AD$ is a set of permissions denied to the requesting entity.
+
+Denying permissions by IRI reference using property `eccauth:denies`.
+
+# Implementation
+
+We developed a light-weight micro service.
+The implementation treats context attributes and permissions only as IRIs of statements with `eccauth:requires`, `eccauth:grants` and `eccauth:denies` properties.
+
+* access control enforcement through SPARQL
+    * single query: matching of context attributes (conjunction of all `eccauth:requires`), grants/denials
+    * all resources denied by default, 1. evaluate denials, 2. evaluate grants
+    * a node shape matches a target resource, if the target resource used as target node for the shape causes no validation error
+
+# Evaluation
+
+* evaluate access control based on requirements by [@Kirrane2015-bu]
+
+# Related Work
+
+* recent access control frameworks for Linked Data
+* SHIELD
+    * problem of update operation to enable validation of the context
+    * complexity
+
+# Conclusions
+
+Lessons learned.
+Future work.
+The evaluation has shown that our current proposal lacks several requirements.
+However, the current approach fits the needs from the LEDS project and our customers.
+To support future development and collaboration we released the current specification and reference implementation as open source.
+With new requirements from our customers and extensions from the community we hope to close the gaps according to the evaluation of access control requirements.
+We think that our approach facilitates future development through its light-weight vocabulary and simple extension mechanism based on Linked Data principles (SHACL-Targets extension).
+Open issues.
+Native named graph / dataset support in SHACL.
+
+# Acknowledgements
+
+This work was partly supported by a grant from the German Federal Ministry of Education and Research (BMBF) for the LEDS Project under grant agreement No 03WKCG11A and 03WKCG11C.
+
+# References
